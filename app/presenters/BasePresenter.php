@@ -19,6 +19,8 @@ abstract class BasePresenter extends Nette\Application\Presenter
 {
 	private $user;
 	
+	private $config;
+	
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
@@ -28,8 +30,8 @@ abstract class BasePresenter extends Nette\Application\Presenter
 		parent::startup();
 		
 		// all presenters secured, redirecting to login form
-		if (!$this->getUser()->isLoggedIn() && $this->name != 'Login') { 
-			$this->redirect('Login:');
+		if (!$this->getUser()->isLoggedIn() && $this->name != 'Auth') { 
+			$this->redirect('Auth:');
 		}
 	}
 	
@@ -64,6 +66,12 @@ abstract class BasePresenter extends Nette\Application\Presenter
 		return $this->user;
 	}
 	
-	
-	
+	public function getConfig()
+	{
+		if (!$this->config) {
+			$this->config = Environment::getConfig();
+		}
+		
+		return $this->config;
+	}
 }

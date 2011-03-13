@@ -7,7 +7,6 @@
  * @package    MyApplication
  */
 
-
 use Nette\Debug;
 use Nette\Environment;
 use Nette\Application\Route;
@@ -27,6 +26,7 @@ Debug::enable();
 
 // 2b) load configuration from config.ini file
 Environment::loadConfig();
+$config = Environment::getConfig();
 
 
 
@@ -36,6 +36,10 @@ $application = Environment::getApplication();
 $application->errorPresenter = 'Error';
 //$application->catchExceptions = TRUE;
 
+/**
+ * Database connection
+ */
+Dibi::connect($config->database);
 
 
 // Step 4: Setup application router

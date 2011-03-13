@@ -7,6 +7,8 @@
  * @package    MyApplication
  */
 
+use Gymvod\Auth\AuthService;
+
 use Nette\Application\AppForm;
 
 /**
@@ -15,7 +17,7 @@ use Nette\Application\AppForm;
  * @author     John Doe
  * @package    MyApplication
  */
-class LoginPresenter extends BasePresenter
+class AuthPresenter extends BasePresenter
 {
 
 	protected function startup()
@@ -39,6 +41,8 @@ class LoginPresenter extends BasePresenter
 		$form->addText('username', 'Username');
 		$form->addPassword('password', 'Password');
 		$form->addSubmit('submit');
+		
+		// TODO  - add validation rules
 
 		$form->onSubmit[] = callback($this, 'submitLoginForm');
 
@@ -57,12 +61,38 @@ class LoginPresenter extends BasePresenter
 			$form->addError($e->getMessage());
 		}
 	}
-	
+
+	public function renderDefault()
+	{
+		
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 
-	public function renderDefault()
+	protected function createComponentRegisterForm()
+	{
+		$form = new AppForm();
+		$form->addText('login', 'Username');
+		$form->addPassword('password', 'Password');
+		$form->addSubmit('submit');
+
+		$form->onSubmit[] = callback($this, 'submitRegisterForm');
+
+		return $form;
+	}
+
+	public function submitRegisterForm(AppForm $form)
+	{
+		$data = $form->getValues();
+
+		AuthService::register($data['login'], $data['password']);
+		$this->flashMessage('Successfully registered');
+		$this->redirect('default');
+	}
+
+	public function renderRegister()
 	{
 		
 	}
